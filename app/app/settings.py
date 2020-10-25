@@ -26,7 +26,10 @@ SECRET_KEY = "w!vejh3yph%o3%0cdym8h5dd#mkue%@&c6d1slxgjax8821*_z"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['inventory-theicthub.herokuapp.com', '127.0.0.1', ]
+ALLOWED_HOSTS = [
+    "inventory-theicthub.herokuapp.com",
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -132,9 +135,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 # https://stackoverflow.com/questions/53694341/heroku-django-deploy-why-am-i-getting-an-error-500-with-successful-deploy-and-s
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+# ie if Heroku server
+if "DATABASE_URL" in os.environ:
+    import dj_database_url
+
+    DATABASES = {"default": dj_database_url.config()}
