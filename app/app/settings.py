@@ -26,7 +26,10 @@ SECRET_KEY = "w!vejh3yph%o3%0cdym8h5dd#mkue%@&c6d1slxgjax8821*_z"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['inventory-theicthub.herokuapp.com', '127.0.0.1', ]
+ALLOWED_HOSTS = [
+    "inventory-theicthub.herokuapp.com",
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -82,8 +85,11 @@ WSGI_APPLICATION = "app.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": str(BASE_DIR / "db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "d64mblegi4s088",
+        "USER": "joepdrkqvqqmdd",
+        "PASSWORD": "2fa2a7b16c294fe95e1c5395ed4b91864c4008525fff17fca949c3b401bbf789",
+        "HOST": "ec2-3-218-75-21.compute-1.amazonaws.com",
     }
 }
 
@@ -132,9 +138,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 # https://stackoverflow.com/questions/53694341/heroku-django-deploy-why-am-i-getting-an-error-500-with-successful-deploy-and-s
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
