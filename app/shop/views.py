@@ -22,6 +22,7 @@ from shop.permissions import (
     CustomerTrasnscationDueListPermission,
     MoveProductPermission,
     ExpensePermission,
+    ReportViewPermission,
 )
 
 
@@ -326,6 +327,7 @@ class ReportViewSet(viewsets.ViewSet):
     """Shows purchase report group by day"""
 
     authentication_classes = (TokenAuthentication,)
+    permission_classes = (ReportViewPermission,)
 
     def getModel(self):
         pass
