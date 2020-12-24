@@ -1,2 +1,4 @@
 sqlite3.OperationalError: no such table: core_user
 Solve: https://stackoverflow.com/questions/25771755/django-operationalerror-no-such-table/37799885
+
+
