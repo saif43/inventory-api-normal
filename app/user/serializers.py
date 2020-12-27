@@ -16,6 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "name",
+            "contact",
             "password",
             "is_owner",
             "is_manager",
