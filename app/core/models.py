@@ -71,14 +71,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Shop(models.Model):
     """model for shop object"""
 
-    name = models.CharField(max_length=255)
+    shopname = models.CharField(max_length=255)
     money = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(User, on_delete=None, null=True)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.name
+        return self.shopname
 
 
 class Product(models.Model):
