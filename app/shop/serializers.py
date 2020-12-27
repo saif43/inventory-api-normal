@@ -40,7 +40,7 @@ class AdminShopSerializer(serializers.ModelSerializer):
         model = models.Shop
         fields = (
             "id",
-            "name",
+            "shopname",
             "money",
             "owner",
             "created_timestamp",
