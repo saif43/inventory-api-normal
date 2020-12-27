@@ -50,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=255)
-    mobile = models.CharField(max_length=15, blank=True)
+    contact = models.CharField(max_length=15, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_owner = models.BooleanField(default=False)
