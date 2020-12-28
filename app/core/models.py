@@ -56,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_owner = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
     is_salesman = models.BooleanField(default=False)
-    created_by = models.ForeignKey("self", on_delete=None, null=True)
+    created_by = models.ForeignKey("self", on_delete=None, null=True, blank=True)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
 
