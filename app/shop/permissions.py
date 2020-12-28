@@ -17,13 +17,31 @@ class ShopAccessPermission(permissions.BasePermission):
     message = "You must have a shop to access this."
 
     def has_permission(self, request, obj):
+        has_shop = None
+
         try:
+            if getShop(request.user):
+                has_shop = True
+        except:
+            has_shop = False
+
+        try:
+            """IF user is Superuser"""
             if request.user.is_superuser:
                 return True
 
+            """IF user is Owner, but doesn't have any shop"""
             if (
                 request.user.is_owner
-                and getShop(request.user)
+                and not has_shop
+                and request.method in ["GET", "POST"]
+            ):
+                return True
+
+            """IF user is Owner and has a shop"""
+            if (
+                request.user.is_owner
+                and has_shop
                 and request.method
                 in [
                     "GET",
@@ -32,6 +50,7 @@ class ShopAccessPermission(permissions.BasePermission):
                 ]
             ):
                 return True
+
         except:
             return False
 

@@ -26,6 +26,11 @@ class ShopSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "owner", "created_timestamp", "modified_timestamp")
 
+    def validate(self, data):
+        data["owner"] = self.context["request"].user
+
+        return data
+
 
 class AdminShopSerializer(serializers.ModelSerializer):
     """Admin(Superuser) Serializer for shop"""

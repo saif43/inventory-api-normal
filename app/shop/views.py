@@ -45,8 +45,12 @@ class ShopViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if not self.request.user.is_superuser:
-            own_shop = getShop(self.request.user)
-            return self.queryset.filter(pk=own_shop.id)
+            try:
+                own_shop = getShop(self.request.user)
+                return self.queryset.filter(pk=own_shop.id)
+            except:
+                """When user does't have any shop, we will show empty list"""
+                return None
 
         return self.queryset
 
