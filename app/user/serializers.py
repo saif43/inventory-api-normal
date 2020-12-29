@@ -6,16 +6,16 @@ from django.utils.translation import ugettext_lazy as _
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the User object"""
 
-    def validate(self, data):
-        try:
-            data["created_by"] = self.context["request"].user
-            return data
-        except:
-            """since created_by field needs to be a user instance, and user is creating himself.
-            We are placing created_by field by Superuser"""
+    # def validate(self, data):
+    #     try:
+    #         data["created_by"] = self.context["request"].user
+    #         return data
+    #     except:
+    #         """since created_by field needs to be a user instance, and user is creating himself.
+    #         We are placing created_by field by Superuser"""
 
-            data["created_by"] = get_user_model().objects.get(username="superuser")
-            return data
+    #         data["created_by"] = get_user_model().objects.get(username="superuser")
+    #         return data
 
     class Meta:
         model = get_user_model()
@@ -43,6 +43,17 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """creates user with encrypted password and retruns the user"""
+
+        try:
+            validated_data["created_by"] = self.context["request"].user
+        except:
+            """since created_by field needs to be a user instance, and user is creating himself.
+            We are placing created_by field by Superuser"""
+
+            validated_data["created_by"] = get_user_model().objects.get(
+                username="superuser"
+            )
+
         return get_user_model().objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
