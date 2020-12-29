@@ -59,7 +59,12 @@ class CreateTokenView(ObtainAuthToken):
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
 
-        has_shop = True if models.Shop.objects.get(owner=user) else False
+        has_shop = False
+
+        try:
+            has_shop = True if models.Shop.objects.get(owner=user) else False
+        except:
+            has_shop = False
 
         return Response(
             {
