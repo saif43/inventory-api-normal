@@ -58,8 +58,15 @@ class CreateTokenView(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
+
+        has_shop = True if models.Shop.objects.get(owner=user) else False
+
         return Response(
-            {"token": token.key, "user": {"id": user.pk, "name": user.name}}
+            {
+                "token": token.key,
+                "user": {"id": user.pk, "name": user.name},
+                "has_shop": has_shop,
+            }
         )
 
         # ref: https://stackoverflow.com/questions/58588653/django-rest-framework-obtainauthtoken-user-login-api-view
