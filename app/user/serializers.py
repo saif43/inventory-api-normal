@@ -44,7 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """creates user with encrypted password and retruns the user"""
 
-        if self.context["request"].user == "AnonymousUser":
+        if self.context["request"].user.is_anonymous:
             validated_data["created_by"] = get_user_model().objects.get(
                 username="superuser"
             )
