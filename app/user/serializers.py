@@ -44,17 +44,13 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """creates user with encrypted password and retruns the user"""
 
-        try:
-            validated_data["created_by"] = self.context["request"].user
-        except:
-            """since created_by field needs to be a user instance, and user is creating himself.
-            We are placing created_by field by Superuser"""
-
+        if self.context["request"].user == "AnonymousUser":
             validated_data["created_by"] = get_user_model().objects.get(
                 username="superuser"
             )
-
-        return get_user_model().objects.create_user(**validated_data)
+            return get_user_model().objects.create_user(**validated_data)
+        else:
+            validated_data["created_by"] = self.context["request"].user
 
     def update(self, instance, validated_data):
         """Update a user, setting the password correctly and return it"""

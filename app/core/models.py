@@ -65,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
 
     def __str__(self):
-        return self.name
+        return self.username
 
 
 class Shop(models.Model):
