@@ -48,9 +48,10 @@ class UserSerializer(serializers.ModelSerializer):
             validated_data["created_by"] = get_user_model().objects.get(
                 username="superuser"
             )
-            return get_user_model().objects.create_user(**validated_data)
         else:
             validated_data["created_by"] = self.context["request"].user
+
+        return get_user_model().objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
         """Update a user, setting the password correctly and return it"""
