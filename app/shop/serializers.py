@@ -110,7 +110,7 @@ class SalesmanSerializer(serializers.Serializer):
 
     id = serializers.IntegerField()
     username = serializers.CharField()
-    mobile = serializers.CharField()
+    contact = serializers.CharField()
 
 
 class ProductSerializer(serializers.ModelSerializer):
