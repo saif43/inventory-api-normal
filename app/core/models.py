@@ -128,7 +128,7 @@ class Customer(models.Model):
     """Customer Model"""
 
     name = models.CharField(max_length=255)
-    contact = models.CharField(max_length=15, blank=True)
+    contact = models.CharField(max_length=15, unique=True)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
@@ -141,7 +141,7 @@ class Vendor(models.Model):
     """Vendor Model"""
 
     name = models.CharField(max_length=255)
-    contact = models.CharField(max_length=15, blank=True)
+    contact = models.CharField(max_length=15, unique=True)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
