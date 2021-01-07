@@ -188,10 +188,27 @@ class CustomerTrasnscationSerializer(serializers.ModelSerializer):
             "id",
             "shop",
             "customer",
+            "customer_detail",
             "created_timestamp",
             "modified_timestamp",
         )
-        read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
+        read_only_fields = (
+            "id",
+            "customer_detail",
+            "shop",
+            "created_timestamp",
+            "modified_timestamp",
+        )
+
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+        response["customer_detail"] = CustomerSerializer(instance.customer).data
+        response["customer_detail"].pop("created_timestamp")
+        response["customer_detail"].pop("modified_timestamp")
+        response["customer_detail"].pop("shop")
+        return response
 
 
 class CustomerOrderedItemsSerializer(serializers.ModelSerializer):
