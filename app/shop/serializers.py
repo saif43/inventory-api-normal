@@ -359,10 +359,7 @@ class CustomerTrasnscationBillSerializer(serializers.ModelSerializer):
             total_bill += i.bill
 
         data["bill"] = total_bill
-
-        if data["due"] != 0:
-            data["due"] = total_bill - previous_paid - new_paid
-
+        data["due"] = total_bill - previous_paid - new_paid
         data["paid"] = previous_paid + new_paid
 
         if data["paid"] > total_bill:
