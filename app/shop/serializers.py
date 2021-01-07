@@ -204,7 +204,8 @@ class CustomerTrasnscationSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         """For the nested represtation"""
-        transactions = models.CustomerOrderedItems.objects.filter(pk=str(instance))
+        transactions = models.CustomerOrderedItems.objects.filter(order=str(instance))
+
         total_bill = 0
 
         for i in transactions:
