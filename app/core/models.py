@@ -227,7 +227,7 @@ def update_customer_bill(sender, instance, created, **kwargs):
     # if bill_object.due == 0:
     bill_object.due += bill
 
-    bill_object.bill = bill
+    bill_object.bill += bill
     bill_object.save()
 
 
