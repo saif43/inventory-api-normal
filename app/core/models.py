@@ -158,11 +158,12 @@ class CustomerTrasnscation(models.Model):
     customer_detail = models.ForeignKey(
         Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail"
     )
+    bill = models.PositiveIntegerField(default=0)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"Trans {self.pk}---{self.shop}"
+        return f"{self.pk}"
 
 
 class CustomerOrderedItems(models.Model):
