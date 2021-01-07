@@ -360,9 +360,7 @@ class CustomerTrasnscationBillSerializer(serializers.ModelSerializer):
 
         data["bill"] = total_bill
 
-        if previous_paid == 0 and new_paid == 0:
-            data["due"] = 0
-        else:
+        if data["due"] != 0:
             data["due"] = total_bill - previous_paid - new_paid
 
         data["paid"] = previous_paid + new_paid

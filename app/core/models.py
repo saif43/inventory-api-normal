@@ -207,7 +207,7 @@ def create_customer_bill(sender, instance, created, **kwargs):
 
     if created:
         CustomerTrasnscationBill.objects.create(
-            order=instance, paid=0, shop=instance.shop
+            order=instance, paid=0, shop=instance.shop, due=0
         )
 
 
