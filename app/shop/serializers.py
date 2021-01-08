@@ -376,6 +376,11 @@ class CustomerTrasnscationBillSerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         order = models.CustomerTrasnscation.objects.get(id=str(instance.order))
         response["customer"] = CustomerSerializer(order.customer).data
+
+        response["customer"].pop("shop")
+        response["customer"].pop("created_timestamp")
+        response["customer"].pop("modified_timestamp")
+
         return response
 
     class Meta:
