@@ -374,7 +374,7 @@ class CustomerTrasnscationBillSerializer(serializers.ModelSerializer):
         """For the nested represtation"""
 
         response = super().to_representation(instance)
-        order = models.CustomerTrasnscation.objects.get(id=instance.order)
+        order = models.CustomerTrasnscation.objects.get(id=str(instance.order))
         response["customer"] = CustomerSerializer(order.customer).data
         return response
 
