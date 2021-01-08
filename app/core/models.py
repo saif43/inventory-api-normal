@@ -155,11 +155,15 @@ class CustomerTrasnscation(models.Model):
 
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer_detail = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail"
+    )
+    bill = models.PositiveIntegerField(default=0)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"Trans {self.pk}---{self.shop}"
+        return f"{self.pk}"
 
 
 class CustomerOrderedItems(models.Model):
@@ -204,7 +208,7 @@ def create_customer_bill(sender, instance, created, **kwargs):
 
     if created:
         CustomerTrasnscationBill.objects.create(
-            order=instance, paid=0, shop=instance.shop
+            order=instance, paid=0, shop=instance.shop, due=0
         )
 
 
@@ -212,21 +216,20 @@ def create_customer_bill(sender, instance, created, **kwargs):
 def update_customer_bill(sender, instance, created, **kwargs):
     """Auto create bill, when customer creates a Transaction"""
 
-    if created:
-        bill_object = CustomerTrasnscationBill.objects.filter(order=instance.order)[0]
+    bill_object = CustomerTrasnscationBill.objects.filter(order=instance.order)[0]
 
-        order_object = CustomerOrderedItems.objects.filter(order=instance.order)
+    order_object = CustomerOrderedItems.objects.get(id=instance.id)
 
-        bill = 0
+    bill = order_object.bill
 
-        for i in order_object:
-            bill += i.bill
+    # for i in order_object:
+    #     bill += i.bill
 
-        if bill_object.due == 0:
-            bill_object.due = bill
+    # if bill_object.due == 0:
+    bill_object.due += bill
 
-        bill_object.bill = bill
-        bill_object.save()
+    bill_object.bill += bill
+    bill_object.save()
 
 
 class VendorTrasnscation(models.Model):
