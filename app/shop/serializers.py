@@ -344,11 +344,19 @@ class CustomerTrasnscationBillSerializer(serializers.ModelSerializer):
 
         return data
 
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+        response["customer"] = CustomerSerializer(instance.order__customer).data
+        return response
+
     class Meta:
         model = models.CustomerTrasnscationBill
         fields = (
             "id",
             "shop",
+            "customer",
             "order",
             "bill",
             "paid",
@@ -359,6 +367,7 @@ class CustomerTrasnscationBillSerializer(serializers.ModelSerializer):
         read_only_fields = (
             "id",
             "shop",
+            "customer",
             "order",
             "bill",
             "due",
