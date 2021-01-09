@@ -370,11 +370,25 @@ class CustomerTrasnscationBillSerializer(serializers.ModelSerializer):
 
         return data
 
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+        order = models.CustomerTrasnscation.objects.get(id=str(instance.order))
+        response["customer"] = CustomerSerializer(order.customer).data
+
+        response["customer"].pop("shop")
+        response["customer"].pop("created_timestamp")
+        response["customer"].pop("modified_timestamp")
+
+        return response
+
     class Meta:
         model = models.CustomerTrasnscationBill
         fields = (
             "id",
             "shop",
+            "customer",
             "order",
             "bill",
             "paid",
@@ -385,6 +399,7 @@ class CustomerTrasnscationBillSerializer(serializers.ModelSerializer):
         read_only_fields = (
             "id",
             "shop",
+            "customer",
             "order",
             "bill",
             "due",
