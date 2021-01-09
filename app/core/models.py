@@ -297,21 +297,20 @@ def create_vendor_bill(sender, instance, created, **kwargs):
 def update_vendor_bill(sender, instance, created, **kwargs):
     """Auto update bill, when vendor updates a Transaction"""
 
-    if created:
-        bill_object = VendorTrasnscationBill.objects.filter(order=instance.order)[0]
+    bill_object = VendorTrasnscationBill.objects.filter(order=instance.order)[0]
 
-        order_object = VendorOrderedItems.objects.filter(order=instance.order)
+    order_object = VendorOrderedItems.objects.filter(order=instance.order)
 
-        bill = 0
+    bill = order_object.bill
 
-        for i in order_object:
-            bill += i.bill
+    # for i in order_object:
+    #     bill += i.bill
 
-        if bill_object.due == 0:
-            bill_object.due = bill
+    # if bill_object.due == 0:
+    bill_object.due += bill
 
-        bill_object.bill = bill
-        bill_object.save()
+    bill_object.bill += bill
+    bill_object.save()
 
 
 class MoveProduct(models.Model):
