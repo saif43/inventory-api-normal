@@ -424,6 +424,16 @@ class VendorTrasnscationSerializer(serializers.ModelSerializer):
         fields = ("id", "shop", "vendor", "created_timestamp", "modified_timestamp")
         read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
 
+    def validate(self, data):
+        product_received = data["product_received"]
+        orders = models.VendorOrderedItems.objects.filter(order=data["id"])
+
+        if product_received and orders:
+            for order in orders:
+                product = models.Product.objects.get(id=order.product)
+                product.stock += order.quantity
+                product.save()
+
 
 class VendorTrasnscationImageSerializer(serializers.ModelSerializer):
     """Serializer for vendor product transaction"""
@@ -457,8 +467,6 @@ class VendorOrderedItemsSerializer(serializers.ModelSerializer):
 
         data["bill"] = data["custom_buying_price"] * quantity
 
-        stock = product.stock + quantity
-
         """Changing Product avg_buying_price"""
         if product.avg_buying_price == 0:
             product.avg_buying_price = data["custom_buying_price"]
@@ -467,7 +475,8 @@ class VendorOrderedItemsSerializer(serializers.ModelSerializer):
                 data["custom_buying_price"] + product.avg_buying_price
             ) / 2
 
-        product.stock = stock
+        # stock = product.stock + quantity
+        # product.stock = stock
         product.save()
 
         return data

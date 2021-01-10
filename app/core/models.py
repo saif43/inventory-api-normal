@@ -156,7 +156,7 @@ class CustomerTrasnscation(models.Model):
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     customer_detail = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail"
+        Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail_1"
     )
     bill = models.PositiveIntegerField(default=0)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
@@ -195,7 +195,7 @@ class CustomerTrasnscationBill(models.Model):
         on_delete=models.CASCADE,
     )
     customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail"
+        Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail_2"
     )
     bill = models.PositiveIntegerField(default=0)
     paid = models.PositiveIntegerField(default=0)
@@ -239,6 +239,7 @@ class VendorTrasnscation(models.Model):
 
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     vendor = models.ForeignKey(Vendor, on_delete=None)
+    product_received = models.BooleanField(default=False)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
 
