@@ -421,16 +421,30 @@ class VendorTrasnscationSerializer(serializers.ModelSerializer):
             "id",
             "shop",
             "vendor",
+            "bill",
             "product_received",
             "created_timestamp",
             "modified_timestamp",
         )
-        read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
+        read_only_fields = (
+            "id",
+            "bill",
+            "shop",
+            "created_timestamp",
+            "modified_timestamp",
+        )
 
     def to_representation(self, instance):
         """For the nested represtation"""
+        transactions = models.VendorOrderedItems.objects.filter(order=str(instance))
+
+        total_bill = 0
+
+        for i in transactions:
+            total_bill += i.bill
 
         response = super().to_representation(instance)
+        response["bill"] = total_bill
         response["vendor"] = VendorSerializer(instance.vendor).data
         response["vendor"].pop("shop")
         response["vendor"].pop("contact")
