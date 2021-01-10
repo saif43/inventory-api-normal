@@ -70,7 +70,6 @@ class BaseShopAttr(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         own_shop = getShop(self.request.user)
-        print(own_shop)
         serializer.save(shop=own_shop)
 
     def get_queryset(self):

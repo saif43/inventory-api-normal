@@ -301,6 +301,20 @@ def create_vendor_bill(sender, instance, created, **kwargs):
 def increase_product(sender, instance, created, **kwargs):
     """Increase stock after receiving the product from vendor"""
 
+    orders = VendorOrderedItems.objects.filter(order=instance.id)
+
+    if orders and instance.product_received:
+        for order in orders:
+            # ref: https://stackoverflow.com/questions/1941212/correct-way-to-use-get-or-create
+            warehouse_product, created = WareHouseProducts.objects.get_or_create(
+                product=order.product,
+                warehouse=order.delivery_warehouse,
+                shop=order.shop,
+            )
+
+            warehouse_product.quantity += order.quantity
+            warehouse_product.save()
+
 
 @receiver(signals.post_save, sender=VendorOrderedItems)
 def update_vendor_bill(sender, instance, created, **kwargs):
