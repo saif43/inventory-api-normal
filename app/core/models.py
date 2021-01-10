@@ -239,7 +239,7 @@ class VendorTrasnscation(models.Model):
     modified_timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class VendorOrderedItems(models.Model):
