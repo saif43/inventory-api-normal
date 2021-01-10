@@ -239,7 +239,7 @@ class VendorTrasnscation(models.Model):
     modified_timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"Trans {self.pk}---{self.shop}"
+        return self.pk
 
 
 class VendorOrderedItems(models.Model):
