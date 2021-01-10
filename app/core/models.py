@@ -188,9 +188,7 @@ class CustomerTrasnscationBill(models.Model):
         CustomerTrasnscation,
         on_delete=models.CASCADE,
     )
-    customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail_2"
-    )
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     bill = models.PositiveIntegerField(default=0)
     paid = models.PositiveIntegerField(default=0)
     due = models.PositiveIntegerField(default=0)
@@ -275,6 +273,7 @@ class VendorTrasnscationBill(models.Model):
         VendorTrasnscation,
         on_delete=models.CASCADE,
     )
+    vendor = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     bill = models.PositiveIntegerField(default=0)
     paid = models.PositiveIntegerField(default=0)
     due = models.PositiveIntegerField(default=0)

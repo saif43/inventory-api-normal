@@ -610,6 +610,17 @@ class VendorTrasnscationBillSerializer(serializers.ModelSerializer):
 
         return data
 
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+        order = models.VendorTrasnscation.objects.get(id=str(instance.order))
+        response["vendor"] = VendorSerializer(order.vendor).data
+
+        response["vendor"].pop("shop")
+        response["vendor"].pop("created_timestamp")
+        response["vendor"].pop("modified_timestamp")
+
     class Meta:
         model = models.VendorTrasnscationBill
         fields = (
