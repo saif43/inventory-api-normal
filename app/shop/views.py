@@ -8,6 +8,8 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
 from rest_framework.authentication import TokenAuthentication
+from django_filters.rest_framework import DjangoFilterBackend
+
 from django.db.models import Avg, Sum
 
 from shop.permissions import (
@@ -93,6 +95,10 @@ class WarehouseProductsView(BaseShopAttr):
     queryset = models.WareHouseProducts.objects.all()
     serializer_class = serializers.WarehouseProductsSerializer
     permission_classes = (WarehouseAccessPermission,)
+
+    # ref: https://stackoverflow.com/a/57258741/8666088
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ["warehouse", "product"]
 
 
 class ProductViewSet(BaseShopAttr):

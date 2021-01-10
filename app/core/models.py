@@ -297,6 +297,11 @@ def create_vendor_bill(sender, instance, created, **kwargs):
         )
 
 
+@receiver(signals.post_save, sender=VendorTrasnscation)
+def increase_product(sender, instance, created, **kwargs):
+    """Increase stock after receiving the product from vendor"""
+
+
 @receiver(signals.post_save, sender=VendorOrderedItems)
 def update_vendor_bill(sender, instance, created, **kwargs):
     """Auto update bill, when vendor updates a Transaction"""

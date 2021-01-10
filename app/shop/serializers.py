@@ -90,19 +90,19 @@ class WarehouseProductsSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
 
-    def to_representation(self, instance):
-        """For the nested represtation"""
+    # def to_representation(self, instance):
+    #     """For the nested represtation"""
 
-        response = super().to_representation(instance)
-        response["product"] = ProductSerializer(instance.product).data
-        response["warehouse"] = WarehouseSerializer(instance.product).data
+    #     response = super().to_representation(instance)
+    #     response["product"] = ProductSerializer(instance.product).data
+    #     response["warehouse"] = WarehouseSerializer(instance.product).data
 
-        response["product"].pop("buying_price")
-        response["product"].pop("stock")
-        response["product"].pop("shop")
+    #     response["product"].pop("buying_price")
+    #     response["product"].pop("stock")
+    #     response["product"].pop("shop")
 
-        response["warehouse"].pop("shop")
-        return response
+    #     response["warehouse"].pop("shop")
+    #     return response
 
 
 class SalesmanSerializer(serializers.Serializer):
@@ -431,19 +431,22 @@ class VendorTrasnscationSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
 
-    def validate(self, data):
-        product_received = data["product_received"]
+    # def validate(self, data):
+    #     product_received = data["product_received"]
 
-        # ref: https://stackoverflow.com/questions/31675038/django-rest-framework-get-id-url-during-validation
-        if self.instance:
-            orders = models.VendorOrderedItems.objects.filter(order=self.instance.id)
-            if product_received and orders:
-                for order in orders:
-                    product = models.Product.objects.get(id=order.product)
-                    product.stock += order.quantity
-                    product.save()
-                    
-        return data
+    #     # ref: https://stackoverflow.com/questions/31675038/django-rest-framework-get-id-url-during-validation
+    #     if self.instance and product_received:
+    #         orders = models.VendorOrderedItems.objects.filter(order=self.instance.id)
+    #         if orders:
+    #             print(orders)
+    #             for order in orders:
+    #                 product = models.Product.objects.get(id=order.product)
+    #                 print(product.stock)
+    #                 product.stock += order.quantity
+    #                 product.save()
+    #                 print(product.stock)
+
+    #     return data
 
 
 class VendorTrasnscationImageSerializer(serializers.ModelSerializer):
