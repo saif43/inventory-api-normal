@@ -194,7 +194,9 @@ class CustomerTrasnscationBill(models.Model):
         CustomerTrasnscation,
         on_delete=models.CASCADE,
     )
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail")
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail"
+    )
     bill = models.PositiveIntegerField(default=0)
     paid = models.PositiveIntegerField(default=0)
     due = models.PositiveIntegerField(default=0)
@@ -300,7 +302,7 @@ def update_vendor_bill(sender, instance, created, **kwargs):
 
     bill_object = VendorTrasnscationBill.objects.filter(order=instance.order)[0]
 
-    order_object = VendorOrderedItems.objects.filter(order=instance.order)
+    order_object = VendorOrderedItems.objects.get(order=instance.order)
 
     bill = order_object.bill
 
