@@ -433,13 +433,15 @@ class VendorTrasnscationSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         product_received = data["product_received"]
-        orders = models.VendorOrderedItems.objects.filter(order=data["id"])
 
-        if product_received and orders:
-            for order in orders:
-                product = models.Product.objects.get(id=order.product)
-                product.stock += order.quantity
-                product.save()
+        #ref: https://stackoverflow.com/questions/31675038/django-rest-framework-get-id-url-during-validation
+        if self.instance
+            orders = models.VendorOrderedItems.objects.filter(order=self.instance.id)
+            if product_received and orders:
+                for order in orders:
+                    product = models.Product.objects.get(id=order.product)
+                    product.stock += order.quantity
+                    product.save()
 
 
 class VendorTrasnscationImageSerializer(serializers.ModelSerializer):
