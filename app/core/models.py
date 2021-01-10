@@ -155,9 +155,6 @@ class CustomerTrasnscation(models.Model):
 
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    customer_detail = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, null=True, related_name="customer_detail_1"
-    )
     bill = models.PositiveIntegerField(default=0)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
@@ -173,9 +170,6 @@ class CustomerOrderedItems(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     selling_price = models.PositiveIntegerField(default=0)
     custom_selling_price = models.PositiveIntegerField(default=0)
-    product_detail = models.ForeignKey(
-        Product, on_delete=models.CASCADE, null=True, related_name="product_detail"
-    )
     quantity = models.PositiveIntegerField(default=0)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True)
     bill = models.PositiveIntegerField(default=0)

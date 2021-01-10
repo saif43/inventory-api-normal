@@ -188,14 +188,12 @@ class CustomerTrasnscationSerializer(serializers.ModelSerializer):
             "id",
             "shop",
             "customer",
-            "customer_detail",
             "bill",
             "created_timestamp",
             "modified_timestamp",
         )
         read_only_fields = (
             "id",
-            "customer_detail",
             "bill",
             "shop",
             "created_timestamp",
@@ -213,10 +211,10 @@ class CustomerTrasnscationSerializer(serializers.ModelSerializer):
 
         response = super().to_representation(instance)
         response["bill"] = total_bill
-        response["customer_detail"] = CustomerSerializer(instance.customer).data
-        response["customer_detail"].pop("created_timestamp")
-        response["customer_detail"].pop("modified_timestamp")
-        response["customer_detail"].pop("shop")
+        response["customer"] = CustomerSerializer(instance.customer).data
+        response["customer"].pop("created_timestamp")
+        response["customer"].pop("modified_timestamp")
+        response["customer"].pop("shop")
         return response
 
 
@@ -225,8 +223,6 @@ class CustomerOrderedItemsSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         product = data["product"]
-        data["product_detail"] = data["product"]
-        # data["selling_price"] = product.selling_price
         quantity = data["quantity"]
         order = data["order"]
 
@@ -272,7 +268,6 @@ class CustomerOrderedItemsSerializer(serializers.ModelSerializer):
             "order",
             "shop",
             "product",
-            "product_detail",
             "custom_selling_price",
             "quantity",
             "bill",
@@ -283,7 +278,6 @@ class CustomerOrderedItemsSerializer(serializers.ModelSerializer):
             "id",
             "shop",
             "bill",
-            "product_detail",
             "created_timestamp",
             "modified_timestamp",
         )
@@ -292,9 +286,11 @@ class CustomerOrderedItemsSerializer(serializers.ModelSerializer):
         """For the nested represtation"""
 
         response = super().to_representation(instance)
-        response["product_detail"] = ProductSerializer(instance.product).data
-        response["product_detail"].pop("buying_price")
-        response["product_detail"].pop("shop")
+        response["product"] = ProductSerializer(instance.product).data
+        response["product"].pop("buying_price")
+        response["product"].pop("shop")
+        response["product"].pop("created_timestamp")
+        response["product"].pop("modified_timestamp")
         return response
 
 
@@ -431,6 +427,17 @@ class VendorTrasnscationSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
 
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+        response["vendor"] = VendorSerializer(instance.vendor).data
+        response["vendor"].pop("shop")
+        response["vendor"].pop("contact")
+        response["vendor"].pop("created_timestamp")
+        response["vendor"].pop("modified_timestamp")
+        return response
+
     # def validate(self, data):
     #     product_received = data["product_received"]
 
@@ -466,8 +473,6 @@ class VendorOrderedItemsSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         product = data["product"]
-        data["product_detail"] = data["product"]
-        # data["buying_price"] = product.buying_price
         quantity = data["quantity"]
         order = data["order"]
         warehouse = data["delivery_warehouse"]
@@ -518,7 +523,6 @@ class VendorOrderedItemsSerializer(serializers.ModelSerializer):
             "product",
             "buying_price",
             "custom_buying_price",
-            "product_detail",
             "delivery_warehouse",
             "quantity",
             "bill",
@@ -530,7 +534,6 @@ class VendorOrderedItemsSerializer(serializers.ModelSerializer):
             "id",
             "shop",
             "bill",
-            "product_detail",
             "buying_price",
             "image",
             "created_timestamp",
@@ -541,9 +544,11 @@ class VendorOrderedItemsSerializer(serializers.ModelSerializer):
         """For the nested represtation"""
 
         response = super().to_representation(instance)
-        response["product_detail"] = ProductSerializer(instance.product).data
-        response["product_detail"].pop("selling_price")
-        response["product_detail"].pop("shop")
+        response["product"] = ProductSerializer(instance.product).data
+        response["product"].pop("selling_price")
+        response["product"].pop("shop")
+        response["product"].pop("created_timestamp")
+        response["product"].pop("modified_timestamp")
         return response
 
 
