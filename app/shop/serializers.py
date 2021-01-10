@@ -421,7 +421,14 @@ class VendorTrasnscationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.VendorTrasnscation
-        fields = ("id", "shop", "vendor", "created_timestamp", "modified_timestamp")
+        fields = (
+            "id",
+            "shop",
+            "vendor",
+            "product_received",
+            "created_timestamp",
+            "modified_timestamp",
+        )
         read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
 
     def validate(self, data):
