@@ -621,6 +621,8 @@ class VendorTrasnscationBillSerializer(serializers.ModelSerializer):
         response["vendor"].pop("created_timestamp")
         response["vendor"].pop("modified_timestamp")
 
+        return response
+
     class Meta:
         model = models.VendorTrasnscationBill
         fields = (

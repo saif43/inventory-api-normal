@@ -247,12 +247,6 @@ class VendorOrderedItems(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     buying_price = models.PositiveIntegerField(default=0)
     custom_buying_price = models.PositiveIntegerField(default=0)
-    product_detail = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="vendor_product_detail",
-    )
     quantity = models.PositiveIntegerField(default=0)
     delivery_warehouse = models.ForeignKey(Warehouse, on_delete=None, null=True)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True)
@@ -273,7 +267,7 @@ class VendorTrasnscationBill(models.Model):
         VendorTrasnscation,
         on_delete=models.CASCADE,
     )
-    vendor = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, null=True)
     bill = models.PositiveIntegerField(default=0)
     paid = models.PositiveIntegerField(default=0)
     due = models.PositiveIntegerField(default=0)
@@ -287,7 +281,7 @@ def create_vendor_bill(sender, instance, created, **kwargs):
 
     if created:
         VendorTrasnscationBill.objects.create(
-            order=instance, paid=0, shop=instance.shop
+            order=instance, paid=0, shop=instance.shop, due=0
         )
 
 
