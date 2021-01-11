@@ -95,12 +95,17 @@ class WarehouseProductsSerializer(serializers.ModelSerializer):
 
         response = super().to_representation(instance)
         response["product"] = ProductSerializer(instance.product).data
+        response["warehouse"] = WarehouseSerializer(instance.warehouse).data
 
         response["product"].pop("buying_price")
         response["product"].pop("stock")
         response["product"].pop("shop")
         response["product"].pop("created_timestamp")
         response["product"].pop("modified_timestamp")
+
+        response["warehouse"].pop("shop")
+        response["warehouse"].pop("created_timestamp")
+        response["warehouse"].pop("modified_timestamp")
 
         return response
 
