@@ -90,19 +90,19 @@ class WarehouseProductsSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
 
-    # def to_representation(self, instance):
-    #     """For the nested represtation"""
+    def to_representation(self, instance):
+        """For the nested represtation"""
 
-    #     response = super().to_representation(instance)
-    #     response["product"] = ProductSerializer(instance.product).data
-    #     response["warehouse"] = WarehouseSerializer(instance.product).data
+        response = super().to_representation(instance)
+        response["product"] = ProductSerializer(instance.product).data
 
-    #     response["product"].pop("buying_price")
-    #     response["product"].pop("stock")
-    #     response["product"].pop("shop")
+        response["product"].pop("buying_price")
+        response["product"].pop("stock")
+        response["product"].pop("shop")
+        response["product"].pop("created_timestamp")
+        response["product"].pop("modified_timestamp")
 
-    #     response["warehouse"].pop("shop")
-    #     return response
+        return response
 
 
 class SalesmanSerializer(serializers.Serializer):
