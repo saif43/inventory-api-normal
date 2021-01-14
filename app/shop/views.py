@@ -327,7 +327,7 @@ class MoveProductViewSet(BaseShopAttr):
 class ExpenseViewSet(BaseShopAttr):
     """Moving products shop to warehouse"""
 
-    queryset = models.Expense.objects.all()
+    queryset = models.Expense.objects.all().order_by(-id)
     serializer_class = serializers.ExpenseSerializer
     permission_classes = (ExpensePermission,)
 
