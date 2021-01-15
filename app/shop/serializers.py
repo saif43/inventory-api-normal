@@ -568,6 +568,13 @@ class VendorOrderedItemsSerializer(serializers.ModelSerializer):
         response["product"].pop("shop")
         response["product"].pop("created_timestamp")
         response["product"].pop("modified_timestamp")
+
+        response["delivery_warehouse"] = WarehouseSerializer(
+            instance.delivery_warehouse
+        ).data
+        response["delivery_warehouse"].pop("shop")
+        response["delivery_warehouse"].pop("created_timestamp")
+        response["delivery_warehouse"].pop("modified_timestamp")
         return response
 
 
