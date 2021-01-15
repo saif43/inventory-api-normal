@@ -764,10 +764,14 @@ class MoveProductSerializer(serializers.ModelSerializer):
         response["product"].pop("created_timestamp")
         response["product"].pop("modified_timestamp")
 
-        response["warehouse"] = WarehouseSerializer(instance.warehouse).data
-        response["warehouse"].pop("shop")
-        response["warehouse"].pop("created_timestamp")
-        response["warehouse"].pop("modified_timestamp")
+        response.pop("shop")
+
+        if instance.move == "S2W":
+            response["from"] = "Shop"
+            response["to"] = WarehouseSerializer(instance.warehouse).data["name"]
+        elif instance.move == "W2S":
+            response["to"] = "Shop"
+            response["from"] = WarehouseSerializer(instance.warehouse).data["name"]
 
         return response
 
