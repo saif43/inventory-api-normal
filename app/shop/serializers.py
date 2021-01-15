@@ -750,6 +750,27 @@ class MoveProductSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
 
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+        response["product"] = ProductSerializer(instance.product).data
+        response["product"].pop("buying_price")
+        response["product"].pop("avg_buying_price")
+        response["product"].pop("selling_price")
+        response["product"].pop("stock")
+        response["product"].pop("stock_alert_amount")
+        response["product"].pop("shop")
+        response["product"].pop("created_timestamp")
+        response["product"].pop("modified_timestamp")
+
+        response["warehouse"] = WarehouseSerializer(instance.warehouse).data
+        response["warehouse"].pop("shop")
+        response["warehouse"].pop("created_timestamp")
+        response["warehouse"].pop("modified_timestamp")
+
+        return response
+
 
 class ExpenseSerializer(serializers.ModelSerializer):
     """Serializer for expense"""
