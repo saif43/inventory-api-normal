@@ -107,6 +107,18 @@ class ProductViewSet(BaseShopAttr):
     serializer_class = serializers.ProductSerializer
     permission_classes = (ProductAccessPermission,)
 
+    @action(methods=["POST"], detail=True, url_path="upload-image")
+    def upload_image(self, request, pk=None):
+        """upload and image to the vendor transaction"""
+        product = self.get_object()
+        serializer = self.get_serializer(product, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SalesmanViewSet(APIView):
     authentication_classes = (TokenAuthentication,)

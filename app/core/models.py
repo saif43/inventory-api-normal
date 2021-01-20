@@ -22,6 +22,14 @@ def transaction_image_file_path(instance, filename):
     return os.path.join("uploads/transaction/", filename)
 
 
+def product_image_file_path(instance, filename):
+    """Generate file path for new product image"""
+    ext = filename.split(".")[-1]
+    filename = f"{uuid.uuid4()}.{ext}"
+
+    return os.path.join("uploads/product/", filename)
+
+
 class UserManager(BaseUserManager):
     def create_user(self, username, password, **extra_kwargs):
         """Creates and saves an user"""
@@ -85,6 +93,7 @@ class Product(models.Model):
     """Product model"""
 
     name = models.CharField(max_length=255)
+    image = models.ImageField(null=True, upload_to=product_image_file_path)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     buying_price = models.PositiveIntegerField(default=0)
     avg_buying_price = models.PositiveIntegerField(default=0)
