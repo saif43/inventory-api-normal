@@ -6,16 +6,11 @@ from django.utils.translation import ugettext_lazy as _
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the User object"""
 
-    # def validate(self, data):
-    #     try:
-    #         data["created_by"] = self.context["request"].user
-    #         return data
-    #     except:
-    #         """since created_by field needs to be a user instance, and user is creating himself.
-    #         We are placing created_by field by Superuser"""
-
-    #         data["created_by"] = get_user_model().objects.get(username="superuser")
-    #         return data
+    def validate(self, data):
+        # ref: https://stackoverflow.com/a/40216082/8666088
+        if not "email" in data.keys():
+            msg = {"email": _("User must have an email address.")}
+            raise serializers.ValidationError(msg, code="authentication")
 
     class Meta:
         model = get_user_model()
