@@ -62,7 +62,11 @@ class CreateTokenView(ObtainAuthToken):
         has_shop = False
 
         try:
-            has_shop = True if models.Shop.objects.get(owner=user) else False
+            if user.is_owner:
+                has_shop = True if models.Shop.objects.get(owner=user) else False
+            elif user.is_manager or user.is_salesman:
+                owner = user.created_by
+                has_shop = True if models.Shop.objects.get(owner=owner) else False
         except:
             has_shop = False
 
