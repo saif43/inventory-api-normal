@@ -1,5 +1,7 @@
 import uuid
 import os
+import random
+import string
 
 from django.db import models
 from django.conf import settings
@@ -31,21 +33,21 @@ def product_image_file_path(instance, filename):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password, **extra_kwargs):
+    def create_user(self, username, email, password, **extra_kwargs):
         """Creates and saves an user"""
-        user = self.model(username=username, **extra_kwargs)
+        user = self.model(username=username, email=email, **extra_kwargs)
         user.set_password(password)
 
-        if not username:
-            raise ValueError("User must have an username")
+        if not username or not email:
+            raise ValueError("User must have an username and email")
 
         user.save(using=self._db)
 
         return user
 
-    def create_superuser(self, username, password):
+    def create_superuser(self, username, email, password):
         """Creates and saves a superuser"""
-        user = self.create_user(username=username, password=password)
+        user = self.create_user(username=username, email=email, password=password)
         user.is_staff = True
         user.is_superuser = True
 
@@ -58,6 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=250, default="", unique=True)
     contact = models.CharField(max_length=15, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
