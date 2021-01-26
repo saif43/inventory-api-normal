@@ -150,3 +150,15 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+# mail varification configuration
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+MAILER_EMAIL_BACKEND = EMAIL_BACKEND
+EMAIL_HOST = "smtp.zoho.com"
+EMAIL_HOST_USER = "saif@theicthub.com"
+EMAIL_HOST_PASSWORD = "Email@24/7"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

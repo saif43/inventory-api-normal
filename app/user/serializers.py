@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import ugettext_lazy as _
+from core import models
+
+import random
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -59,6 +62,42 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+
+
+class UserOTPSerializer(serializers.ModelSerializer):
+    """Serializer for user OTP"""
+
+    class Meta:
+        model = models.UserOTP
+        fields = ("id", "email", "otp")
+        read_only_fields = ("id", "otp")
+
+    def create(self, validated_data):
+        """creates user with encrypted password and retruns the user"""
+
+        otp = int("".join([str(random.randint(0, 9)) for _ in range(6)]))
+
+        try:
+            exist = models.UserOTP.objects.get(email=validated_data["email"])
+
+            if exist:
+                exist.otp = otp
+                exist.save()
+                data = serializers.UserOTPSerializer(exist).data
+                # return Response(data=data, status=status.HTTP_201_CREATED)
+                return data
+        except:
+            validated_data["otp"] = otp
+            return models.UserOTP.objects.create(**validated_data)
+
+        # if self.context["request"].user.is_anonymous:
+        #     validated_data["created_by"] = get_user_model().objects.get(
+        #         username="superuser"
+        #     )
+        # else:
+        #     validated_data["created_by"] = self.context["request"].user
+
+        # return get_user_model().objects.create_user(**validated_data)
 
 
 class AuthtokenSerializer(serializers.Serializer):

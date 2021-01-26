@@ -3,13 +3,14 @@ from user import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register("", views.UserListView)
+router.register("profile", views.UserListView)
+router.register("otp", views.UserOTPView)
 
 app_name = "user"
 
 urlpatterns = [
     path("create/", views.CreateUserAPIView.as_view(), name="create"),
-    path("profile/", include(router.urls)),
+    path("", include(router.urls)),
     path("token/", views.CreateTokenView.as_view(), name="token"),
     path("me/", views.ManageUserView.as_view(), name="me"),
 ]

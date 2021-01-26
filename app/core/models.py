@@ -8,6 +8,8 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models import signals
 from django.utils import timezone
+from django.core.mail import EmailMessage
+from django.contrib.sites.shortcuts import get_current_site
 
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -77,6 +79,24 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+
+class UserOTP(models.Model):
+    """OTP for user registration"""
+
+    email = models.EmailField(max_length=250, unique=True, blank=False)
+    otp = models.PositiveIntegerField()
+
+
+@receiver(signals.post_save, sender=UserOTP)
+def send_otp(sender, instance, created, **kwargs):
+    """Send Email on create"""
+
+    mail_subject = "Activate your account."
+    message = instance.otp
+    email = EmailMessage(mail_subject, str(message), to=[instance.email])
+
+    email.send()
 
 
 class Shop(models.Model):

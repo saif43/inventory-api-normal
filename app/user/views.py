@@ -14,6 +14,32 @@ from user.permissions import ProfileAccessPermission
 from user import serializers
 from core import models
 
+import random
+
+
+class UserOTPView(viewsets.ModelViewSet):
+    """Viewset for User OTP"""
+
+    queryset = models.UserOTP.objects.all()
+    serializer_class = serializers.UserOTPSerializer
+    authentication_classes = (TokenAuthentication,)
+
+    # def create(self, request):
+    #     # ref: https://stackoverflow.com/a/41003177/8666088
+    #     otp = int("".join([str(random.randint(0, 9)) for _ in range(7)]))
+
+    #     try:
+    #         exist = models.UserOTP.objects.get(email=request.data["email"])
+
+    #         if exist:
+    #             exist.otp = otp
+    #             exist.save()
+    #             data = serializers.UserOTPSerializer(exist).data
+    #             return Response(data=data, status=status.HTTP_201_CREATED)
+    #     except:
+    #         request.data["otp"] = otp
+    #         return super().create(request)
+
 
 class CreateUserAPIView(generics.CreateAPIView):
     """Creates a new user in the system"""
