@@ -161,7 +161,7 @@ class VendorViewSet(BaseShopAttr):
 class CustomerTrasnscationViewSet(BaseShopAttr):
     """Manage transaction of customer"""
 
-    queryset = models.CustomerTrasnscation.objects.all()
+    queryset = models.CustomerTrasnscation.objects.all().order_by("-id")
     serializer_class = serializers.CustomerTrasnscationSerializer
     permission_classes = (CustomerTransactionPermission,)
 
@@ -248,13 +248,15 @@ class CustomerDueListViewSet(BaseShopAttr):
 
     def get_queryset(self):
         own_shop = getShop(self.request.user)
-        return models.CustomerTrasnscationBill.objects.filter(shop=own_shop, due__gt=0)
+        return models.CustomerTrasnscationBill.objects.filter(
+            shop=own_shop, due__gt=0
+        ).order_by("-id")
 
 
 class VendorTrasnscationViewSet(BaseShopAttr):
     """Manage transaction of Vendor"""
 
-    queryset = models.VendorTrasnscation.objects.all()
+    queryset = models.VendorTrasnscation.objects.all().order_by("-id")
     serializer_class = serializers.VendorTrasnscationSerializer
     permission_classes = (CustomerTransactionPermission,)
 
@@ -325,7 +327,9 @@ class VendorDueListViewSet(BaseShopAttr):
 
     def get_queryset(self):
         own_shop = getShop(self.request.user)
-        return models.VendorTrasnscationBill.objects.filter(shop=own_shop, due__gt=0)
+        return models.VendorTrasnscationBill.objects.filter(
+            shop=own_shop, due__gt=0
+        ).order_by("-id")
 
 
 class MoveProductViewSet(BaseShopAttr):
