@@ -335,7 +335,7 @@ class VendorDueListViewSet(BaseShopAttr):
 class MoveProductViewSet(BaseShopAttr):
     """Moving products shop to warehouse"""
 
-    queryset = models.MoveProduct.objects.all()
+    queryset = models.MoveProduct.objects.all().order_by("-id")
     serializer_class = serializers.MoveProductSerializer
     permission_classes = (MoveProductPermission,)
 
