@@ -96,10 +96,19 @@ class CreateTokenView(ObtainAuthToken):
         except:
             has_shop = False
 
+        usertype = ""
+
+        if user.is_owner:
+            usertype = "owner"
+        elif user.is_manager:
+            usertype = "manager"
+        elif user.is_salesman:
+            usertype = "salesman"
+
         return Response(
             {
                 "token": token.key,
-                "user": {"id": user.pk, "name": user.name},
+                "user": {"id": user.pk, "name": user.name, "type": usertype},
                 "has_shop": has_shop,
             }
         )
