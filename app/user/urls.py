@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register("profile", views.UserListView)
+router.register("search", views.SearchedUserView)
 router.register("otp", views.UserOTPView)
 
 app_name = "user"

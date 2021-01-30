@@ -71,6 +71,13 @@ class UserListView(viewsets.ModelViewSet):
             return queryset
 
 
+class SearchedUserView(viewsets.ModelViewSet):
+    queryset = models.User.objects.all()
+    serializer_class = serializers.UserSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("=username",)
+
+
 class CreateTokenView(ObtainAuthToken):
     """Create a new auth token for user"""
 
