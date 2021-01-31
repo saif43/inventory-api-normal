@@ -84,7 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class UserOTP(models.Model):
     """OTP for user registration"""
 
-    email = models.EmailField(max_length=250, unique=True, blank=False)
+    email = models.EmailField(max_length=250, blank=False)
     otp = models.PositiveIntegerField()
 
 

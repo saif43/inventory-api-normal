@@ -76,28 +76,15 @@ class UserOTPSerializer(serializers.ModelSerializer):
         """creates user with encrypted password and retruns the user"""
 
         otp = int("".join([str(random.randint(0, 9)) for _ in range(6)]))
+        email = validated_data["email"]
 
-        try:
-            exist = models.UserOTP.objects.get(email=validated_data["email"])
+        exist = models.UserOTP.objects.filter(email=email)
 
-            if exist:
-                exist.otp = otp
-                exist.save()
-                data = serializers.UserOTPSerializer(exist).data
-                # return Response(data=data, status=status.HTTP_201_CREATED)
-                return data
-        except:
-            validated_data["otp"] = otp
-            return models.UserOTP.objects.create(**validated_data)
+        if exist:
+            for i in exist:
+                i.delete()
 
-        # if self.context["request"].user.is_anonymous:
-        #     validated_data["created_by"] = get_user_model().objects.get(
-        #         username="superuser"
-        #     )
-        # else:
-        #     validated_data["created_by"] = self.context["request"].user
-
-        # return get_user_model().objects.create_user(**validated_data)
+        return models.UserOTP.objects.create(email=email, otp=otp)
 
 
 class AuthtokenSerializer(serializers.Serializer):
