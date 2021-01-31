@@ -75,7 +75,7 @@ class UserOTPSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """creates user with encrypted password and retruns the user"""
 
-        otp = int("".join([str(random.randint(0, 9)) for _ in range(6)]))
+        otp = random.randint(100000, 999999)
         email = validated_data["email"]
 
         exist = models.UserOTP.objects.filter(email=email)
