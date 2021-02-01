@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from core import models
 
 import random
+import hashlib
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -74,7 +75,7 @@ class UserOTPSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "otp")
 
     def create(self, validated_data):
-        """creates user with encrypted password and retruns the user"""
+        """creates user OTP"""
 
         otp = random.randint(100000, 999999)
         email = validated_data["email"]
@@ -86,6 +87,15 @@ class UserOTPSerializer(serializers.ModelSerializer):
                 i.delete()
 
         return models.UserOTP.objects.create(email=email, otp=otp)
+
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+        otp = response.pop("otp")
+
+        response["otp"] = hashlib.md5(str(otp).encode()).hexdigest()
+        return response
 
 
 class AuthtokenSerializer(serializers.Serializer):
