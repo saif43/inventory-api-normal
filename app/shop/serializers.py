@@ -210,13 +210,14 @@ class CustomerTrasnscationSerializer(serializers.ModelSerializer):
         """For the nested represtation"""
         transactions = models.CustomerOrderedItems.objects.filter(order=str(instance))
 
-        total_bill = 0
-
-        for i in transactions:
-            total_bill += i.bill
+        bill = models.CustomerTrasnscationBill.objects.get(order=instance.id).bill
+        due = models.CustomerTrasnscationBill.objects.get(order=instance.id).due
+        paid = models.CustomerTrasnscationBill.objects.get(order=instance.id).paid
 
         response = super().to_representation(instance)
-        response["bill"] = total_bill
+        response["bill"] = bill
+        response["due"] = due
+        response["paid"] = paid
         response["customer"] = CustomerSerializer(instance.customer).data
         response["customer"].pop("created_timestamp")
         response["customer"].pop("modified_timestamp")
