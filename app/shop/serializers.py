@@ -445,13 +445,14 @@ class VendorTrasnscationSerializer(serializers.ModelSerializer):
         """For the nested represtation"""
         transactions = models.VendorOrderedItems.objects.filter(order=str(instance))
 
-        total_bill = 0
-
-        for i in transactions:
-            total_bill += i.bill
+        bill = models.VendorTrasnscationBill.objects.get(order=instance).bill
+        paid = models.VendorTrasnscationBill.objects.get(order=instance).paid
+        due = models.VendorTrasnscationBill.objects.get(order=instance).due
 
         response = super().to_representation(instance)
-        response["bill"] = total_bill
+        response["bill"] = bill
+        response["paid"] = paid
+        response["due"] = due
         response["vendor"] = VendorSerializer(instance.vendor).data
         response["vendor"].pop("shop")
         response["vendor"].pop("contact")
