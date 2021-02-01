@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
         if not "email" in data.keys():
             msg = {"email": _("User must have an email address.")}
             raise serializers.ValidationError(msg, code="authentication")
+        return data
 
     class Meta:
         model = get_user_model()
