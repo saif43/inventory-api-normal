@@ -39,5 +39,8 @@ urlpatterns = [
         "purchase_report/<str:report_type>/",
         views.PurchaseReportViewSet.as_view({"get": "list"}),
     ),
-    path("sell_report/<str:date>/", views.SellReportViewSet.as_view({"get": "list"})),
+    path(
+        "sell_report/<str:report_type>/",
+        views.SellReportViewSet.as_view({"get": "list"}),
+    ),
 ]
