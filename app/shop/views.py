@@ -365,34 +365,28 @@ class ReportViewSet(viewsets.ViewSet):
         user = models.User.objects.get(id=request.user.id)
         own_shop = getShop(user)
 
-        if kwargs:
-            # if user want to get report of a specific date
-            date = kwargs["date"]
+        if kwargs["report_type"] == "daily":
+            reportType = "date"
 
-            queryset = (
-                self.getModel()
-                .objects.filter(shop=own_shop)
-                .values("created_timestamp__date")
-                .annotate(bill=Sum("bill"))
-                .filter(created_timestamp__date=date)
-            )
+        elif kwargs["report_type"] == "weekly":
+            reportType = "week"
 
-            queryset = [
-                {"date": x["created_timestamp__date"], "bill": x["bill"]}
-                for x in queryset
-            ]
-            return Response(queryset)
+        elif kwargs["report_type"] == "monthly":
+            reportType = "month"
 
-        # if user want to see all report
+        elif kwargs["report_type"] == "yearly":
+            reportType = "year"
+
         queryset = (
             self.getModel()
             .objects.filter(shop=own_shop)
-            .values("created_timestamp__date")
+            .values(f"created_timestamp__{reportType}")
             .annotate(bill=Sum("bill"))
         )
 
         queryset = [
-            {"date": x["created_timestamp__date"], "bill": x["bill"]} for x in queryset
+            {reportType: x[f"created_timestamp__{reportType}"], "bill": x["bill"]}
+            for x in queryset
         ]
         return Response(queryset)
 
