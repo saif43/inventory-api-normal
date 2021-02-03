@@ -33,8 +33,8 @@ app_name = "shop"
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("salesman/", views.SalesmanViewSet.as_view(), name="salesman"),
-    path("manager/", views.ManagerViewSet.as_view(), name="manager"),
+    path("salesman/", views.SalesmanAPIView.as_view(), name="salesman"),
+    path("manager/", views.ManagerAPIView.as_view(), name="manager"),
     path(
         "purchase_report/<str:report_type>/",
         views.PurchaseReportViewSet.as_view({"get": "list"}),

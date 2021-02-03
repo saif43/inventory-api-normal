@@ -120,7 +120,7 @@ class ProductViewSet(BaseShopAttr):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SalesmanViewSet(APIView):
+class SalesmanAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
 
     def get(self, request, format=None):
@@ -131,7 +131,7 @@ class SalesmanViewSet(APIView):
         return Response(serializers.SalesmanSerializer(queryset, many=True).data)
 
 
-class ManagerViewSet(APIView):
+class ManagerAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
 
     def get(self, request, format=None):
