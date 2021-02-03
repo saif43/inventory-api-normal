@@ -188,6 +188,7 @@ class CustomerTrasnscation(models.Model):
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     bill = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=50, default="Initialized")
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
 
