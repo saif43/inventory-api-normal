@@ -195,6 +195,7 @@ class CustomerTrasnscationSerializer(serializers.ModelSerializer):
             "shop",
             "customer",
             "bill",
+            "status",
             "created_timestamp",
             "modified_timestamp",
         )
