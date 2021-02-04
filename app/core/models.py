@@ -247,6 +247,7 @@ def update_customer_bill(sender, instance, created, **kwargs):
 
     order_object = CustomerOrderedItems.objects.filter(id=instance.id)
 
+    bill = 0
     for i in order_object:
         bill += i.bill
 
@@ -342,6 +343,7 @@ def update_vendor_bill(sender, instance, created, **kwargs):
 
     order_object = VendorOrderedItems.objects.filter(order=instance.order)
 
+    bill = 0
     for i in order_object:
         bill += i.bill
 
