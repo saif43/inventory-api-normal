@@ -349,7 +349,7 @@ def update_vendor_bill(sender, instance, created, **kwargs):
 
     # bill_object.due += bill
 
-    bill_object.bill += bill
+    bill_object.bill = bill
     bill_object.save()
 
 
