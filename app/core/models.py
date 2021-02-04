@@ -251,9 +251,9 @@ def update_customer_bill(sender, instance, created, **kwargs):
     for i in order_object:
         bill += i.bill
 
-    bill_object.due += bill
+    # bill_object.due += bill
 
-    bill_object.bill += bill
+    bill_object.bill = bill
     bill_object.save()
 
 
@@ -347,7 +347,7 @@ def update_vendor_bill(sender, instance, created, **kwargs):
     for i in order_object:
         bill += i.bill
 
-    bill_object.due += bill
+    # bill_object.due += bill
 
     bill_object.bill += bill
     bill_object.save()
