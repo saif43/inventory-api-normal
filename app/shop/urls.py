@@ -38,6 +38,16 @@ urlpatterns = [
         views.AllTransactionListAPIView.as_view(),
         name="transaction",
     ),
+    path(
+        "account_payable/",
+        views.AccountPayableAPIView.as_view(),
+        name="account_payable",
+    ),
+    path(
+        "account_receivable/",
+        views.AccountReceivableAPIView.as_view(),
+        name="account_receivable",
+    ),
     path("salesman/", views.SalesmanAPIView.as_view(), name="salesman"),
     path("manager/", views.ManagerAPIView.as_view(), name="manager"),
     path(

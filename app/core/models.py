@@ -245,14 +245,11 @@ def update_customer_bill(sender, instance, created, **kwargs):
 
     bill_object = CustomerTrasnscationBill.objects.filter(order=instance.order)[0]
 
-    order_object = CustomerOrderedItems.objects.get(id=instance.id)
+    order_object = CustomerOrderedItems.objects.filter(id=instance.id)
 
-    bill = order_object.bill
+    for i in order_object:
+        bill += i.bill
 
-    # for i in order_object:
-    #     bill += i.bill
-
-    # if bill_object.due == 0:
     bill_object.due += bill
 
     bill_object.bill += bill
@@ -343,14 +340,11 @@ def update_vendor_bill(sender, instance, created, **kwargs):
 
     bill_object = VendorTrasnscationBill.objects.filter(order=instance.order)[0]
 
-    order_object = VendorOrderedItems.objects.get(order=instance.order)
+    order_object = VendorOrderedItems.objects.filter(order=instance.order)
 
-    bill = order_object.bill
+    for i in order_object:
+        bill += i.bill
 
-    # for i in order_object:
-    #     bill += i.bill
-
-    # if bill_object.due == 0:
     bill_object.due += bill
 
     bill_object.bill += bill

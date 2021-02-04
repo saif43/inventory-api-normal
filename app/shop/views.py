@@ -334,6 +334,78 @@ class VendorDueListViewSet(BaseShopAttr):
         ).order_by("-id")
 
 
+class AllTransactionListAPIView(APIView):
+    """For getting N numbers of all transactions(sales & purchase)"""
+
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        own_shop = getShop(self.request.user)
+        response = []
+
+        customerTransactionQuerySet = models.CustomerTrasnscation.objects.filter(
+            shop=own_shop
+        )
+
+        vendorTransactionQuerySet = models.VendorTrasnscation.objects.filter(
+            shop=own_shop
+        )
+
+        """
+        In the CustomerTrasnscationSerializer and VendorTrasnscationSerializer, we have used to_representation() 
+        funciton, which can process 1 data at a time. That's why, instead of sending full querySet in the 
+        serializer, we are looping our querySet and sending single data and saving the response in response array.
+        """
+
+        for tran in customerTransactionQuerySet:
+            customerTransaction = serializers.CustomerTrasnscationSerializer(tran).data
+
+            response.append(customerTransaction)
+
+        for tran in vendorTransactionQuerySet:
+            vendorTransaction = serializers.VendorTrasnscationSerializer(tran).data
+
+            response.append(vendorTransaction)
+
+        response = sorted(response, key=itemgetter("created_timestamp"), reverse=True)
+
+        if kwargs["limit"] == "all":
+            pass
+        else:
+            limit = int(kwargs["limit"])
+            response = response[:limit]
+
+        # ref: https://stackoverflow.com/a/73050/8666088
+
+        return Response(response)
+
+
+class AccountPayableAPIView(APIView):
+    """For getting account payable information"""
+
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        own_shop = getShop(self.request.user)
+        objects = models.VendorTrasnscationBill.objects.filter(due__gt=0)
+
+        payable = objects.aggregate(payable=Sum("due"))
+        return Response(payable)
+
+
+class AccountReceivableAPIView(APIView):
+    """For getting account payable information"""
+
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        own_shop = getShop(self.request.user)
+        objects = models.CustomerTrasnscationBill.objects.filter(due__gt=0)
+
+        receivable = objects.aggregate(receivable=Sum("due"))
+        return Response(receivable)
+
+
 class MoveProductViewSet(BaseShopAttr):
     """Moving products shop to warehouse"""
 
@@ -379,6 +451,11 @@ class ReportViewSet(viewsets.ViewSet):
         elif kwargs["report_type"] == "yearly":
             reportType = "year"
 
+        x = self.getModel().objects.filter(shop=own_shop)
+
+        for i in x:
+            print(i)
+
         queryset = (
             self.getModel()
             .objects.filter(shop=own_shop)
@@ -401,49 +478,3 @@ class PurchaseReportViewSet(ReportViewSet):
 class SellReportViewSet(ReportViewSet):
     def getModel(self):
         return models.CustomerOrderedItems
-
-
-class AllTransactionListAPIView(APIView):
-    """For getting N numbers of all transactions(sales & purchase)"""
-
-    authentication_classes = (TokenAuthentication,)
-
-    def get(self, request, *args, **kwargs):
-        own_shop = getShop(self.request.user)
-        response = []
-
-        customerTransactionQuerySet = models.CustomerTrasnscation.objects.filter(
-            shop=own_shop
-        )
-
-        vendorTransactionQuerySet = models.VendorTrasnscation.objects.filter(
-            shop=own_shop
-        )
-
-        """
-        In the CustomerTrasnscationSerializer and VendorTrasnscationSerializer, we have used to_representation() 
-        funciton, which can process 1 data at a time. That's why, instead of sending full querySet in the 
-        serializer, we are looping our querySet and sending single data and saving the response in response array.
-        """
-
-        for tran in customerTransactionQuerySet:
-            customerTransaction = serializers.CustomerTrasnscationSerializer(tran).data
-
-            response.append(customerTransaction)
-
-        for tran in vendorTransactionQuerySet:
-            vendorTransaction = serializers.VendorTrasnscationSerializer(tran).data
-
-            response.append(vendorTransaction)
-
-        response = sorted(response, key=itemgetter("created_timestamp"), reverse=True)
-
-        if kwargs["limit"] == "all":
-            pass
-        else:
-            limit = int(kwargs["limit"])
-            response = response[:limit]
-
-        # ref: https://stackoverflow.com/a/73050/8666088
-
-        return Response(response)
