@@ -183,10 +183,14 @@ class CustomerTrasnscationSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         """Filter customers by shop"""
 
-        super(CustomerTrasnscationSerializer, self).__init__(*args, **kwargs)
-
-        own_shop = getShop(user=self.context["request"].user)
-        self.fields["customer"].queryset = models.Customer.objects.filter(shop=own_shop)
+        try:
+            super(CustomerTrasnscationSerializer, self).__init__(*args, **kwargs)
+            own_shop = getShop(user=self.context["request"].user)
+            self.fields["customer"].queryset = models.Customer.objects.filter(
+                shop=own_shop
+            )
+        except:
+            pass
 
     class Meta:
         model = models.CustomerTrasnscation
@@ -418,10 +422,12 @@ class VendorTrasnscationSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         """Filter vendors by shop"""
 
-        super(VendorTrasnscationSerializer, self).__init__(*args, **kwargs)
-
-        own_shop = getShop(self.context["request"].user)
-        self.fields["vendor"].queryset = models.Vendor.objects.filter(shop=own_shop)
+        try:
+            super(VendorTrasnscationSerializer, self).__init__(*args, **kwargs)
+            own_shop = getShop(self.context["request"].user)
+            self.fields["vendor"].queryset = models.Vendor.objects.filter(shop=own_shop)
+        except:
+            pass
 
     class Meta:
         model = models.VendorTrasnscation

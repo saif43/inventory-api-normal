@@ -1,6 +1,8 @@
 from core import models
 from shop import serializers
 
+from operator import itemgetter
+
 from rest_framework import viewsets, status, filters, generics, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -399,3 +401,49 @@ class PurchaseReportViewSet(ReportViewSet):
 class SellReportViewSet(ReportViewSet):
     def getModel(self):
         return models.CustomerOrderedItems
+
+
+class AllTransactionListAPIView(APIView):
+    """For getting N numbers of all transactions(sales & purchase)"""
+
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        own_shop = getShop(self.request.user)
+        response = []
+
+        customerTransactionQuerySet = models.CustomerTrasnscation.objects.filter(
+            shop=own_shop
+        )
+
+        vendorTransactionQuerySet = models.VendorTrasnscation.objects.filter(
+            shop=own_shop
+        )
+
+        """
+        In the CustomerTrasnscationSerializer and VendorTrasnscationSerializer, we have used to_representation() 
+        funciton, which can process 1 data at a time. That's why, instead of sending full querySet in the 
+        serializer, we are looping our querySet and sending single data and saving the response in response array.
+        """
+
+        for tran in customerTransactionQuerySet:
+            customerTransaction = serializers.CustomerTrasnscationSerializer(tran).data
+
+            response.append(customerTransaction)
+
+        for tran in vendorTransactionQuerySet:
+            vendorTransaction = serializers.VendorTrasnscationSerializer(tran).data
+
+            response.append(vendorTransaction)
+
+        response = sorted(response, key=itemgetter("created_timestamp"), reverse=True)
+
+        if kwargs["limit"] == "all":
+            pass
+        else:
+            limit = int(kwargs["limit"])
+            response = response[:limit]
+
+        # ref: https://stackoverflow.com/a/73050/8666088
+
+        return Response(response)

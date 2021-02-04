@@ -33,6 +33,11 @@ app_name = "shop"
 
 urlpatterns = [
     path("", include(router.urls)),
+    path(
+        "transaction/<str:limit>",
+        views.AllTransactionListAPIView.as_view(),
+        name="transaction",
+    ),
     path("salesman/", views.SalesmanAPIView.as_view(), name="salesman"),
     path("manager/", views.ManagerAPIView.as_view(), name="manager"),
     path(
