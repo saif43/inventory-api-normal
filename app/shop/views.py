@@ -387,10 +387,14 @@ class AccountPayableAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         own_shop = getShop(self.request.user)
-        objects = models.VendorTrasnscationBill.objects.filter(due__gt=0)
+        objects = models.VendorTrasnscationBill.objects.filter(due__gt=0, shop=own_shop)
 
-        payable = objects.aggregate(payable=Sum("due"))
-        return Response(payable)
+        payable = 0
+
+        if objects:
+            payable = objects.aggregate(Sum("due"))
+
+        return Response({"payable": payable})
 
 
 class AccountReceivableAPIView(APIView):
@@ -400,10 +404,32 @@ class AccountReceivableAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         own_shop = getShop(self.request.user)
-        objects = models.CustomerTrasnscationBill.objects.filter(due__gt=0)
+        objects = models.CustomerTrasnscationBill.objects.filter(
+            due__gt=0, shop=own_shop
+        )
 
-        receivable = objects.aggregate(receivable=Sum("due"))
-        return Response(receivable)
+        receivable = 0
+
+        if objects:
+            receivable = objects.aggregate(Sum("due"))
+
+        return Response({"receivable": receivable})
+
+
+class CurrentSalesAmountAPIView(APIView):
+    """Get total sale of today"""
+
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        own_shop = getShop(self.request.user)
+        objects = models.CustomerTrasnscation.objects.filter(shop=own_shop)
+
+        total_sale = 0
+        if objects:
+            total_sale = objects.aggregate(Sum("bill"))
+
+        return Response({"total_sale": total_sale})
 
 
 class MoveProductViewSet(BaseShopAttr):

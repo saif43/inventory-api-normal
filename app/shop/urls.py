@@ -48,6 +48,11 @@ urlpatterns = [
         views.AccountReceivableAPIView.as_view(),
         name="account_receivable",
     ),
+    path(
+        "sale_amount_today/",
+        views.CurrentSalesAmountAPIView.as_view(),
+        name="sale_amount_today",
+    ),
     path("salesman/", views.SalesmanAPIView.as_view(), name="salesman"),
     path("manager/", views.ManagerAPIView.as_view(), name="manager"),
     path(
