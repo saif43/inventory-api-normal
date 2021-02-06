@@ -393,7 +393,7 @@ class AccountPayableAPIView(APIView):
         payable = 0
 
         if objects:
-            payable = objects.aggregate(Sum("due"))["bill__sum"]
+            payable = objects.aggregate(Sum("due"))["due__sum"]
 
         return Response({"payable": payable})
 
@@ -412,7 +412,7 @@ class AccountReceivableAPIView(APIView):
         receivable = 0
 
         if objects:
-            receivable = objects.aggregate(Sum("due"))["bill__sum"]
+            receivable = objects.aggregate(Sum("due"))["due__sum"]
 
         return Response({"receivable": receivable})
 
