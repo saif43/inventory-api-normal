@@ -2,6 +2,7 @@ from core import models
 from shop import serializers
 
 from operator import itemgetter
+import datetime
 
 from rest_framework import viewsets, status, filters, generics, mixins
 from rest_framework.response import Response
@@ -423,11 +424,13 @@ class CurrentSalesAmountAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         own_shop = getShop(self.request.user)
-        objects = models.CustomerTrasnscation.objects.filter(shop=own_shop)
+        objects = models.CustomerTrasnscationBill.objects.filter(
+            shop=own_shop, created_timestamp__date=datetime.datetime.now().date()
+        )
 
         total_sale = 0
         if objects:
-            total_sale = objects.aggregate(Sum("bill"))
+            total_sale = objects.aggregate(Sum("bill"))["bill__sum"]
 
         return Response({"total_sale": total_sale})
 
