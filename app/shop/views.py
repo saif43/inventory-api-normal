@@ -425,21 +425,23 @@ class ExpenseAPIView(APIView):
 
         objects = None
 
-        if kwargs["type"] == "day":
-            objects = models.Expense.objects.filter(
-                shop=own_shop, created_timestamp__date=datetime.datetime.now().date()
-            )
-        elif kwargs["type"] == "month":
-            objects = models.Expense.objects.filter(
-                shop=own_shop, created_timestamp__month=datetime.datetime.now().month
-            )
+        today_expense_object = models.Expense.objects.filter(
+            shop=own_shop, created_timestamp__date=datetime.datetime.now().date()
+        )
+        thisMonth_expense_object = models.Expense.objects.filter(
+            shop=own_shop, created_timestamp__month=datetime.datetime.now().month
+        )
 
-        expense = 0
+        today_expense = 0
+        thisMonth_expense = 0
 
         if objects:
-            expense = objects.aggregate(Sum("amount"))["amount__sum"]
+            today_expense = today_expense_object.aggregate(Sum("amount"))["amount__sum"]
+            thisMonth_expense = thisMonth_expense_objetoday_expense_object.aggregate(
+                Sum("amount")
+            )["amount__sum"]
 
-        return Response({"expense": expense})
+        return Response({"today": today_expense, "this_month": thisMonth_expense})
 
 
 class CurrentSalesAmountAPIView(APIView):

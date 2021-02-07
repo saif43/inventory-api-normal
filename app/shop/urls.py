@@ -54,7 +54,7 @@ urlpatterns = [
         name="sale_amount_today",
     ),
     path(
-        "expense/<str:type>",
+        "recent_expense/",
         views.ExpenseAPIView.as_view(),
         name="expense_apiview",
     ),
