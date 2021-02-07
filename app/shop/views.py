@@ -441,7 +441,9 @@ class ExpenseAPIView(APIView):
                 Sum("amount")
             )["amount__sum"]
 
-        return Response({"today": today_expense, "this_month": thisMonth_expense})
+        return Response(
+            {"today_expense": today_expense, "this_month_expense": thisMonth_expense}
+        )
 
 
 class CurrentSalesAmountAPIView(APIView):
