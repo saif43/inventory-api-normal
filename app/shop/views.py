@@ -414,6 +414,34 @@ class AccountReceivableAPIView(APIView):
         return Response({"receivable": receivable})
 
 
+class ExpenseAPIView(APIView):
+    """For getting today's/this month expense"""
+
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        print(datetime.datetime.now().month)
+        own_shop = getShop(self.request.user)
+
+        objects = None
+
+        if kwargs["type"] == "day":
+            objects = models.Expense.objects.filter(
+                shop=own_shop, created_timestamp__date=datetime.datetime.now().date()
+            )
+        elif kwargs["type"] == "month":
+            objects = models.Expense.objects.filter(
+                shop=own_shop, created_timestamp__month=datetime.datetime.now().month
+            )
+
+        expense = 0
+
+        if objects:
+            expense = objects.aggregate(Sum("amount"))["amount__sum"]
+
+        return Response({"expense": expense})
+
+
 class CurrentSalesAmountAPIView(APIView):
     """Get total sale of today"""
 
