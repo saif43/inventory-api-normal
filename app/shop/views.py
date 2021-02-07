@@ -13,8 +13,7 @@ from rest_framework.decorators import api_view
 from rest_framework.authentication import TokenAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
 
-from django.db.models import Avg, Sum
-
+from django.db.models import Avg, Sum, F
 from shop.permissions import (
     ShopAccessPermission,
     WarehouseAccessPermission,
@@ -431,9 +430,6 @@ class CurrentSalesAmountAPIView(APIView):
             total_sale = objects.aggregate(Sum("bill"))["bill__sum"]
 
         return Response({"total_sale": total_sale})
-
-
-from django.db.models import F
 
 
 class LowStockProductsAPIView(APIView):
