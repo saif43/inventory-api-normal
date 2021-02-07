@@ -420,7 +420,6 @@ class ExpenseAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
 
     def get(self, request, *args, **kwargs):
-        print(datetime.datetime.now().month)
         own_shop = getShop(self.request.user)
 
         objects = None
@@ -432,14 +431,18 @@ class ExpenseAPIView(APIView):
             shop=own_shop, created_timestamp__month=datetime.datetime.now().month
         )
 
+        print(thisMonth_expense_object)
+
         today_expense = 0
         thisMonth_expense = 0
 
-        if objects:
+        if today_expense_object:
             today_expense = today_expense_object.aggregate(Sum("amount"))["amount__sum"]
-            thisMonth_expense = thisMonth_expense_objetoday_expense_object.aggregate(
-                Sum("amount")
-            )["amount__sum"]
+
+        if thisMonth_expense_object:
+            thisMonth_expense = thisMonth_expense_object.aggregate(Sum("amount"))[
+                "amount__sum"
+            ]
 
         return Response(
             {"today_expense": today_expense, "this_month_expense": thisMonth_expense}
