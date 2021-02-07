@@ -344,39 +344,37 @@ class AllTransactionListAPIView(APIView):
         own_shop = getShop(self.request.user)
         response = []
 
+        # getting all customer transactin data
         customerTransactionQuerySet = models.CustomerTrasnscation.objects.filter(
             shop=own_shop
         )
 
+        customerTransaction = serializers.CustomerTrasnscationSerializer(
+            customerTransactionQuerySet, many=True
+        ).data
+
+        # getting all vendor transactin data
         vendorTransactionQuerySet = models.VendorTrasnscation.objects.filter(
             shop=own_shop
         )
 
-        """
-        In the CustomerTrasnscationSerializer and VendorTrasnscationSerializer, we have used to_representation() 
-        funciton, which can process 1 data at a time. That's why, instead of sending full querySet in the 
-        serializer, we are looping our querySet and sending single data and saving the response in response array.
-        """
+        vendorTransaction = serializers.VendorTrasnscationSerializer(
+            vendorTransactionQuerySet, many=True
+        ).data
 
-        for tran in customerTransactionQuerySet:
-            customerTransaction = serializers.CustomerTrasnscationSerializer(tran).data
+        response.append(customerTransaction)
+        response.append(vendorTransaction)
 
-            response.append(customerTransaction)
-
-        for tran in vendorTransactionQuerySet:
-            vendorTransaction = serializers.VendorTrasnscationSerializer(tran).data
-
-            response.append(vendorTransaction)
+        response = response[0]  # [[x,y]] => [x,y]
 
         response = sorted(response, key=itemgetter("created_timestamp"), reverse=True)
+        # ref: https://stackoverflow.com/a/73050/8666088
 
         if kwargs["limit"] == "all":
             pass
         else:
             limit = int(kwargs["limit"])
             response = response[:limit]
-
-        # ref: https://stackoverflow.com/a/73050/8666088
 
         return Response(response)
 
@@ -433,6 +431,24 @@ class CurrentSalesAmountAPIView(APIView):
             total_sale = objects.aggregate(Sum("bill"))["bill__sum"]
 
         return Response({"total_sale": total_sale})
+
+
+from django.db.models import F
+
+
+class LowStockProductsAPIView(APIView):
+    """Get low stock product list"""
+
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        own_shop = getShop(self.request.user)
+        objects = models.Product.objects.filter(
+            shop=own_shop, stock__lt=F("stock_alert_amount")
+        )
+        objects = serializers.ProductSerializer(objects, many=True).data
+
+        return Response(objects)
 
 
 class MoveProductViewSet(BaseShopAttr):
