@@ -341,7 +341,6 @@ class AllTransactionListAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         own_shop = getShop(self.request.user)
-        response = []
 
         # getting all customer transactin data
         customerTransactionQuerySet = models.CustomerTrasnscation.objects.filter(
@@ -361,10 +360,7 @@ class AllTransactionListAPIView(APIView):
             vendorTransactionQuerySet, many=True
         ).data
 
-        response.append(customerTransaction)
-        response.append(vendorTransaction)
-
-        response = response[0]  # [[x,y]] => [x,y]
+        response = vendorTransaction + customerTransaction
 
         response = sorted(response, key=itemgetter("created_timestamp"), reverse=True)
         # ref: https://stackoverflow.com/a/73050/8666088
