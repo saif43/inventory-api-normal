@@ -523,14 +523,10 @@ class ReportViewSet(viewsets.ViewSet):
         elif kwargs["report_type"] == "yearly":
             reportType = "year"
 
-        x = self.getModel().objects.filter(shop=own_shop)
-
-        for i in x:
-            print(i)
-
         queryset = (
             self.getModel()
             .objects.filter(shop=own_shop)
+            .order_by(f"-created_timestamp__{reportType}")
             .values(f"created_timestamp__{reportType}")
             .annotate(bill=Sum("bill"))
         )
