@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from .views import ping
 from django.conf.urls.static import static
 from django.conf import settings
@@ -23,6 +23,6 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("ping/", ping, name="ping"),
-    path("api/user/", include("user.urls")),
-    path("api/shop/", include("shop.urls")),
+    re_path("api/(?P<version>(v1|v2))/user/", include("user.urls")),
+    re_path("api/(?P<version>(v1|v2))/shop/", include("shop.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

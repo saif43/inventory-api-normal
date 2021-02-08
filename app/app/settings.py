@@ -118,6 +118,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# ref: https://gist.github.com/olegkovalov/fb2fd307bf328c40cd33908c8c1e1728#file-settings_rest_framework-py
+REST_FRAMEWORK = {
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning"
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

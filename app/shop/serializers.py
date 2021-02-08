@@ -181,6 +181,10 @@ class CustomerTrasnscationSerializer(serializers.ModelSerializer):
     """Serializer for customer product transaction"""
 
     def __init__(self, *args, **kwargs):
+
+        # example of accessing version in serializers
+        kwargs["context"]["request"].version
+        
         """Filter customers by shop"""
 
         try:
