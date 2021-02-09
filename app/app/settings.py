@@ -27,6 +27,7 @@ ALLOWED_HOSTS = [
     "inventory-theicthub.herokuapp.com",
     "127.0.0.1",
     "inventory-lemon.vercel.app",
+    "inventory.theicthub-team.vercel.app",
     "inventory-gjzxtug27.vercel.app",
 ]
 
