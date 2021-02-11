@@ -115,12 +115,7 @@ class CreateTokenView(ObtainAuthToken):
         return Response(
             {
                 "token": token.key,
-                "user": {
-                    "id": user.pk,
-                    "username": user.username,
-                    "name": user.name,
-                    "type": usertype,
-                },
+                "user": {"id": user.pk, "name": user.name, "type": usertype},
                 "has_shop": has_shop,
             }
         )
