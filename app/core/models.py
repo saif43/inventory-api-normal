@@ -104,7 +104,7 @@ class Shop(models.Model):
 
     shopname = models.CharField(max_length=255)
     money = models.PositiveIntegerField(default=0)
-    owner = models.ForeignKey(User, on_delete=None, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     created_timestamp = models.DateTimeField(default=timezone.now, editable=False)
     modified_timestamp = models.DateTimeField(default=timezone.now)
 

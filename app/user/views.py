@@ -123,7 +123,7 @@ class CreateTokenView(ObtainAuthToken):
         # ref: https://stackoverflow.com/questions/58588653/django-rest-framework-obtainauthtoken-user-login-api-view
 
 
-class ManageUserView(generics.RetrieveUpdateDestroyAPIView):
+class ManageUserView(generics.RetrieveUpdateAPIView):
     """Manage the authenticated user"""
 
     serializer_class = serializers.UserSerializer
