@@ -73,6 +73,22 @@ class WarehouseSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "shop", "created_timestamp", "modified_timestamp")
         read_only_fields = ("id", "shop", "created_timestamp", "modified_timestamp")
 
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+
+        warerhouseProducts = models.WareHouseProducts.objects.filter(
+            warehouse=instance
+        ).count()
+
+        if warerhouseProducts:
+            response["empty"] = False
+        else:
+            response["empty"] = True
+
+        return response
+
 
 class WarehouseProductsSerializer(serializers.ModelSerializer):
     """Serializer for warehouse products"""
