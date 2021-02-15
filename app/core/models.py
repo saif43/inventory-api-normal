@@ -279,7 +279,9 @@ class VendorOrderedItems(models.Model):
     buying_price = models.PositiveIntegerField(default=0)
     custom_buying_price = models.PositiveIntegerField(default=0)
     quantity = models.PositiveIntegerField(default=0)
-    delivery_warehouse = models.ForeignKey(Warehouse, on_delete=None, null=True)
+    delivery_warehouse = models.ForeignKey(
+        Warehouse, on_delete=models.SET_NULL, null=True
+    )
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True)
     bill = models.PositiveIntegerField(default=0)
     image = models.ImageField(null=True, upload_to=transaction_image_file_path)
@@ -362,7 +364,7 @@ class MoveProduct(models.Model):
     )
 
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    warehouse = models.ForeignKey(Warehouse, on_delete=None)
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
     move = models.CharField(max_length=3, choices=options, null=True)
