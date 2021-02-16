@@ -65,6 +65,20 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+
+        if instance.is_owner:
+            response["usertype"] = "owner"
+        elif instance.is_manager:
+            response["usertype"] = "manager"
+        elif instance.is_salesman:
+            response["usertype"] = "salesman"
+
+        return response
+
 
 class UserOTPSerializer(serializers.ModelSerializer):
     """Serializer for user OTP"""
