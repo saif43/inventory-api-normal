@@ -125,7 +125,7 @@ class ProductViewSet(BaseShopAttr):
 class SalesmanAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
 
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         queryset = models.User.objects.all()
         queryset = queryset.filter(
             created_by=getShop(self.request.user).owner, is_salesman=True
@@ -136,7 +136,7 @@ class SalesmanAPIView(APIView):
 class ManagerAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
 
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         queryset = models.User.objects.all()
         queryset = queryset.filter(
             created_by=getShop(self.request.user).owner, is_manager=True
