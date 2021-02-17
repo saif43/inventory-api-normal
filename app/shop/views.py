@@ -167,6 +167,9 @@ class CustomerTrasnscationViewSet(BaseShopAttr):
     serializer_class = serializers.CustomerTrasnscationSerializer
     permission_classes = (CustomerTransactionPermission,)
 
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("=customer__id",)
+
 
 class CustomerOrderedItemsViewSet(viewsets.ModelViewSet):
     """Manage customer ordered items of a single order"""
@@ -261,6 +264,9 @@ class VendorTrasnscationViewSet(BaseShopAttr):
     queryset = models.VendorTrasnscation.objects.all().order_by("-id")
     serializer_class = serializers.VendorTrasnscationSerializer
     permission_classes = (CustomerTransactionPermission,)
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("=vendor__id",)
 
 
 class VendorOrderedItemsViewSet(viewsets.ModelViewSet):
