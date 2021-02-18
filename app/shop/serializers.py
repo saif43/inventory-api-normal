@@ -160,6 +160,18 @@ class ProductSerializer(serializers.ModelSerializer):
             "modified_timestamp",
         )
 
+    def to_representation(self, instance):
+        """For the nested represtation"""
+
+        response = super().to_representation(instance)
+
+        if instance.stock <= instance.stock_alert_amount:
+            response["status"] = "Low"
+        else:
+            response["status"] = ""
+
+        return response
+
 
 class CustomerSerializer(serializers.ModelSerializer):
     """Serializer for Customer"""
